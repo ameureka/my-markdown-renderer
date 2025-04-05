@@ -1,0 +1,28 @@
+# Worker 的唯一名称，部署后会成为 URL 的一部分
+name = "my-markdown-renderer"
+# Worker 入口文件
+main = "src/index.js"
+# 兼容性日期，更新到 2024-10-30
+compatibility_date = "2024-10-30"
+# 添加 Node.js 兼容性标志
+compatibility_flags = ["nodejs_compat"]
+
+# --- KV 命名空间绑定 ---
+# 这会告诉 wrangler 创建或链接一个名为 'MARKDOWN_KV' 的 KV 命名空间
+# 在你的 Worker 代码中可以通过 `env.MARKDOWN_KV` 来访问它。
+[[kv_namespaces]]
+binding = "MARKDOWN_KV"
+id = "e8212bb5681840a3a44e1bfff52fd505"
+preview_id = "ed67abba3b504765839b8c7391fe4e5c"
+
+# --- 静态资源绑定 ---
+# 绑定静态资源文件夹，使Worker可以访问前端页面
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "markdown-renderer-assets"
+preview_bucket_name = "markdown-renderer-assets-dev"
+
+# --- 环境变量配置 ---
+# 对于敏感信息，我们使用 Cloudflare Workers Secrets
+# 已通过 `wrangler secret put API_KEY` 设置了 API_KEY
+# 开发环境可以使用 .dev.vars 文件（不包含在版本控制中）

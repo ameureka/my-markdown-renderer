@@ -1,0 +1,21 @@
+{
+	"name": "my-markdown-renderer",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev",
+		"test": "vitest",
+		"build": "esbuild src/index.js --bundle --outfile=dist/worker.js --format=esm --external:fs --external:path"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.7.5",
+		"esbuild": "^0.25.2",
+		"vitest": "~3.0.7",
+		"wrangler": "^4.7.2"
+	},
+	"dependencies": {
+		"marked": "^15.0.7"
+	}
+}
