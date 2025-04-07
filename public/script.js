@@ -25,6 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const aboutLink = document.getElementById('about-link');
   const aboutModal = document.getElementById('about-modal');
   const closeAboutBtn = document.getElementById('close-about-btn');
+  const viewSourceBtn = document.getElementById('view-source-btn');
+  const sourceModal = document.getElementById('source-modal');
+  const closeSourceBtn = document.getElementById('close-source-btn');
+  const copySourceBtn = document.getElementById('copy-source-btn');
+  const sourceCodeDisplay = document.getElementById('source-code-display');
 
   // 状态变量
   let selectedTemplate = 'general'; // 默认模板
@@ -53,6 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 确保模态框和加载动画初始化为隐藏状态
     aboutModal.classList.add('hidden');
     loadingOverlay.classList.add('hidden');
+    
+    // 隐藏源码模态框
+    sourceModal.classList.add('hidden');
   }
 
   // 应用主题
@@ -360,6 +368,50 @@ CSS Grid是一种二维布局系统，它可以同时处理行和列。
     showNotification('已插入示例内容', 'success');
   }
 
+  // 查看源码功能
+  async function viewSourceCode() {
+    if (!generatedUrl) return;
+    
+    try {
+      // 显示加载动画
+      loadingOverlay.classList.remove('hidden');
+      
+      // 使用fetch获取页面HTML源码
+      const response = await fetch(generatedUrl, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`获取源码失败: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        // 将HTML源码显示在模态框中
+        // 转义HTML以防止浏览器解析
+        const escapedHtml = data.html
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+        
+        sourceCodeDisplay.innerHTML = escapedHtml;
+        sourceModal.classList.remove('hidden');
+      } else {
+        throw new Error(data.message || '未知错误');
+      }
+    } catch (error) {
+      showNotification(`错误: ${error.message}`, 'error');
+    } finally {
+      // 隐藏加载动画
+      loadingOverlay.classList.add('hidden');
+    }
+  }
+
   // ======= 事件监听器 =======
 
   // 处理模板选择
@@ -494,11 +546,73 @@ CSS Grid是一种二维布局系统，它可以同时处理行和列。
     }
   });
 
+  // 查看源码按钮
+  viewSourceBtn.addEventListener('click', async () => {
+    if (generatedUrl) {
+      try {
+        // 显示加载状态
+        loadingOverlay.classList.remove('hidden');
+        
+        // 使用fetch获取HTML内容
+        const response = await fetch(generatedUrl, {
+          headers: {
+            'Accept': 'text/html'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('获取源代码失败');
+        }
+        
+        // 获取HTML源码
+        const htmlSource = await response.text();
+        
+        // 在模态框中显示源码，转义HTML以正确显示
+        sourceCodeDisplay.textContent = htmlSource;
+        
+        // 显示模态框
+        sourceModal.classList.remove('hidden');
+      } catch (error) {
+        showNotification(`错误: ${error.message}`, 'error');
+      } finally {
+        // 隐藏加载状态
+        loadingOverlay.classList.add('hidden');
+      }
+    }
+  });
+  
+  // 关闭源码模态框
+  closeSourceBtn.addEventListener('click', () => {
+    sourceModal.classList.add('hidden');
+  });
+  
+  // 点击源码模态框背景关闭
+  sourceModal.addEventListener('click', (e) => {
+    if (e.target === sourceModal) {
+      sourceModal.classList.add('hidden');
+    }
+  });
+  
+  // 复制源代码按钮
+  copySourceBtn.addEventListener('click', () => {
+    const sourceToCopy = sourceCodeDisplay.textContent;
+    if (sourceToCopy) {
+      navigator.clipboard.writeText(sourceToCopy)
+        .then(() => {
+          showNotification('源代码已复制到剪贴板', 'success');
+        })
+        .catch(err => {
+          showNotification('复制失败: ' + err, 'error');
+        });
+    }
+  });
+
   // 按ESC键关闭模态框和结果面板
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       resultPanel.classList.add('hidden');
       aboutModal.classList.add('hidden');
+      sourceModal.classList.add('hidden');
       // 确保加载动画被隐藏
       loadingOverlay.classList.add('hidden');
     }

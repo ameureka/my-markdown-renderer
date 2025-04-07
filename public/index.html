@@ -140,6 +140,9 @@
           <button id="copy-url-btn" class="secondary-button">
             <i class="icon ion-md-copy"></i>复制链接
           </button>
+          <button id="view-source-btn" class="secondary-button">
+            <i class="icon ion-md-code"></i>查看源码
+          </button>
           <button id="open-link-btn" class="secondary-button">
             <i class="icon ion-md-open"></i>打开链接
           </button>
@@ -184,6 +187,24 @@
         <h3>如何获取API密钥</h3>
         <p>请联系管理员获取您的API密钥，以便使用本工具。</p>
         <p class="version-info">版本 1.0.0 | &copy; 2023 公众号排版神器</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 源代码模态框 -->
+  <div id="source-modal" class="modal hidden">
+    <div class="modal-content source-modal-content">
+      <div class="modal-header">
+        <h2>HTML源代码</h2>
+        <button id="copy-source-btn" class="secondary-button">
+          <i class="icon ion-md-copy"></i>复制代码
+        </button>
+        <button id="close-source-btn" class="icon-button">
+          <i class="icon ion-md-close"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre id="source-code-display"></pre>
       </div>
     </div>
   </div>
