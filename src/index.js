@@ -1,4 +1,5 @@
 import { marked } from 'marked';
+import { TemplateManager } from './templateManager.js';
 
 // 配置 marked 选项
 marked.setOptions({
@@ -14,84 +15,231 @@ const GENERAL_TEMPLATE = {
   displayName: '通用',
   description: '适用于各种场景的通用模板',
   styles: `
+    :root {
+      --primary-color: #3b82f6;
+      --primary-light: #60a5fa;
+      --primary-dark: #2563eb;
+      --text-color: #1e293b;
+      --text-light: #64748b;
+      --bg-color: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --code-bg: #f1f5f9;
+      --code-color: #db2777;
+      --blockquote-bg: #f1f5f9;
+      --blockquote-border: #3b82f6;
+      --max-width: 800px;
+    }
+    
     body { 
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      line-height: 1.6;
-      padding: 20px;
-      max-width: 100%;
-      margin: auto;
-      background-color: #f8f9fa;
-      color: #343a40;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      line-height: 1.75;
+      padding: 0;
+      margin: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+    
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 30px 20px;
     }
     
     main { 
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      background-color: var(--bg-card);
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
       width: 100%;
       box-sizing: border-box;
     }
     
     h1 { 
-      font-size: 28px;
-      font-weight: 600;
-      color: #212529;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary-dark);
       margin-top: 0;
-      margin-bottom: 24px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #e9ecef;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--primary-light);
+      text-align: center;
     }
     
     h2 {
-      font-size: 22px;
-      color: #343a40;
-      margin-top: 32px;
+      font-size: 24px;
+      color: var(--primary-dark);
+      margin-top: 40px;
       margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+      position: relative;
+    }
+    
+    h2::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 80px;
+      height: 3px;
+      background-color: var(--primary-color);
+      border-radius: 3px;
     }
     
     h3 {
-      font-size: 18px;
-      color: #495057;
-      margin-top: 24px;
-      margin-bottom: 12px;
+      font-size: 20px;
+      color: var(--text-color);
+      margin-top: 30px;
+      margin-bottom: 15px;
+      position: relative;
+      padding-left: 15px;
+    }
+    
+    h3::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 5px;
+      bottom: 5px;
+      width: 4px;
+      background-color: var(--primary-light);
+      border-radius: 4px;
+    }
+    
+    p {
+      margin-bottom: 20px;
+      line-height: 1.8;
     }
     
     code { 
-      background-color: #f1f3f5;
-      padding: 2px 6px;
+      background-color: var(--code-bg);
+      padding: 3px 6px;
       border-radius: 4px;
+      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
       font-size: 0.9em;
-      color: #e83e8c;
+      color: var(--code-color);
     }
     
     pre { 
-      background-color: #f8f9fa;
-      padding: 16px;
-      border-radius: 6px;
+      background-color: #1e293b;
+      padding: 20px;
+      border-radius: 8px;
       overflow-x: auto;
-      border: 1px solid #e9ecef;
+      margin: 25px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     
     pre code {
       background-color: transparent;
       padding: 0;
-      color: #212529;
+      color: #e2e8f0;
+      font-size: 0.95em;
+      line-height: 1.5;
     }
     
     blockquote { 
-      background-color: #f8f9fa;
-      border-left: 4px solid #ced4da;
-      padding: 16px;
+      background-color: var(--blockquote-bg);
+      border-left: 5px solid var(--blockquote-border);
+      padding: 20px;
+      margin: 25px 0;
+      color: var(--text-color);
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+    }
+    
+    blockquote > *:last-child {
+      margin-bottom: 0;
+    }
+    
+    ul, ol {
+      padding-left: 25px;
+      margin-bottom: 25px;
+    }
+    
+    li {
+      margin-bottom: 8px;
+    }
+    
+    li > ul, li > ol {
+      margin-top: 8px;
+      margin-bottom: 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    th {
+      background-color: var(--primary-light);
+      color: white;
+      font-weight: 600;
+      padding: 12px 15px;
+      text-align: left;
+    }
+    
+    td {
+      padding: 10px 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+    
+    tr:last-child td {
+      border-bottom: none;
+    }
+    
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+    
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
       margin: 20px 0;
-      color: #495057;
+      display: block;
     }
     
     footer {
-      margin-top: 32px;
+      margin-top: 40px;
       text-align: center;
       font-size: 14px;
-      color: #6c757d;
+      color: var(--text-light);
+      padding: 20px 0;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    @media (max-width: 768px) {
+      main {
+        padding: 25px 20px;
+      }
+      
+      h1 {
+        font-size: 28px;
+      }
+      
+      h2 {
+        font-size: 22px;
+      }
+      
+      h3 {
+        font-size: 18px;
+      }
     }
   `,
   render: function(title, content) {
@@ -104,11 +252,12 @@ const GENERAL_TEMPLATE = {
     <style>${this.styles}</style>
 </head>
 <body>
-    <main>${content}</main>
-    <footer>
-        <hr>
-        <p><small>由 Markdown 渲染服务生成 · 通用模板</small></p>
-    </footer>
+    <div class="container">
+      <main>${content}</main>
+      <footer>
+          <p><small>由 Markdown 渲染服务生成 · 通用模板</small></p>
+      </footer>
+    </div>
 </body>
 </html>`;
   }
@@ -674,7 +823,7 @@ export default {
                 return new Response(JSON.stringify({
                     status: 'ok',
                     message: 'Worker 运行正常',
-                    templates: Templates.getAvailableTemplates()
+                    templates: TemplateManager.getAvailableTemplates()
                 }), {
                     headers: {
                         'Content-Type': 'application/json',
@@ -688,7 +837,7 @@ export default {
             if (path === '/templates' && method === 'GET') {
                 return new Response(JSON.stringify({
                     success: true,
-                    templates: Templates.getAvailableTemplates()
+                    templates: TemplateManager.getAvailableTemplates()
                 }), {
                     headers: {
                         'Content-Type': 'application/json',
@@ -767,10 +916,10 @@ export default {
                 }
 
                 // 检查模板是否有效
-                if (!Templates.isValidTemplate(template)) {
+                if (!TemplateManager.isValidTemplate(template)) {
                     return new Response(JSON.stringify({
                         success: false,
-                        message: `模板 "${template}" 不存在。可用模板: ${Templates.getAvailableTemplates().map(t => t.name).join(', ')}`
+                        message: `模板 "${template}" 不存在。可用模板: ${TemplateManager.getAvailableTemplates().map(t => t.name).join(', ')}`
                     }), {
                         headers: { 
                             'Content-Type': 'application/json',
@@ -862,7 +1011,7 @@ export default {
                 
                 // 使用模板渲染HTML
                 try {
-                    const finalHtml = Templates.render(templateName, titleToUse, htmlContent);
+                    const finalHtml = TemplateManager.render(templateName, titleToUse, htmlContent);
                     
                     // 检查Accept头，决定返回HTML还是JSON
                     const acceptHeader = request.headers.get('Accept') || '';

@@ -59,7 +59,7 @@ export class TemplateManager {
    */
   static render(templateName, title, content) {
     const template = this.getTemplate(templateName);
-    return template.template(title, content);
+    return template.render(title, content);
   }
   
   /**
