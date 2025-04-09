@@ -1153,3 +1153,36 @@ body {
     text-align: center;
   }
 }
+
+/* GitHub链接样式 */
+.github-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff5252;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.github-link i {
+  font-size: 20px;
+}
+
+.github-link:hover {
+  background-color: rgba(255, 82, 82, 0.1);
+  transform: translateY(-1px);
+}
+
+.dark-theme .github-link {
+  color: #ff7070;
+}
+
+/* 在小屏幕上隐藏GitHub链接文字，只显示图标 */
+@media (max-width: 768px) {
+  .github-link span {
+    display: none;
+  }
+}
