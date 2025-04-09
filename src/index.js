@@ -1,5 +1,6 @@
 import { marked } from 'marked';
 import { TemplateManager } from './templateManager.js';
+import { callDifyWorkflow } from './difyIntegration.js';
 
 // 配置 marked 选项
 marked.setOptions({
@@ -1087,6 +1088,64 @@ export default {
                     return new Response(content, {
                         headers: { 'Content-Type': 'application/javascript;charset=UTF-8' },
                         status: 200,
+                    });
+                }
+            }
+
+            // 处理Dify工作流调用
+            if (path === '/api/dify/generate' && request.method === 'POST') {
+                try {
+                    const { url } = await request.json();
+                    
+                    if (!url) {
+                        return new Response(JSON.stringify({
+                            success: false,
+                            message: '请提供目标URL'
+                        }), {
+                            status: 400,
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Access-Control-Allow-Origin': '*'
+                            }
+                        });
+                    }
+
+                    const apiKey = env.DIFY_API_KEY || request.headers.get('X-API-Key');
+                    
+                    if (!apiKey) {
+                        return new Response(JSON.stringify({
+                            success: false,
+                            message: '未提供API密钥'
+                        }), {
+                            status: 401,
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Access-Control-Allow-Origin': '*'
+                            }
+                        });
+                    }
+
+                    const result = await callDifyWorkflow(url, apiKey);
+                    
+                    return new Response(JSON.stringify({
+                        success: true,
+                        content: result.answer
+                    }), {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*'
+                        }
+                    });
+                } catch (error) {
+                    return new Response(JSON.stringify({
+                        success: false,
+                        message: error.message
+                    }), {
+                        status: 500,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*'
+                        }
                     });
                 }
             }

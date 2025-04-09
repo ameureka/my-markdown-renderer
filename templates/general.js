@@ -2,7 +2,7 @@
 export default {
   name: 'general',
   displayName: '通用',
-  description: '适用于微信公众号排版的通用模板，遵循公众号的宽度和布局规范',
+  description: '适合一般文章',
   styles: `
     :root {
       --primary-color: #c06000;       /* 主题橙色 */

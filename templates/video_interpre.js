@@ -1,5 +1,5 @@
 // 视频解释模板
-module.exports = {
+export default {
   name: 'video_interpre',
   displayName: '视频解释',
   description: '用于视频内容的讲解和说明',

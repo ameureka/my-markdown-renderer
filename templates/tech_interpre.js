@@ -1,5 +1,5 @@
 // 技术解释模板
-module.exports = {
+export default {
   name: 'tech_interpre',
   displayName: '技术解释',
   description: '用于深入解释技术概念和原理',

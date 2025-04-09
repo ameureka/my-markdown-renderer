@@ -1,6 +1,5 @@
-// 应用主逻辑
 document.addEventListener('DOMContentLoaded', () => {
-  // 获取DOM元素
+  // 应用主逻辑
   const apiKeyInput = document.getElementById('api-key');
   const togglePasswordBtn = document.getElementById('toggle-password');
   const rememberKeyCheckbox = document.getElementById('remember-key');
@@ -30,6 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeSourceBtn = document.getElementById('close-source-btn');
   const copySourceBtn = document.getElementById('copy-source-btn');
   const sourceCodeDisplay = document.getElementById('source-code-display');
+
+  // URL生成功能
+  const targetUrlInput = document.getElementById('target-url');
+  const generateFromUrlBtn = document.getElementById('generate-from-url');
 
   // 状态变量
   let selectedTemplate = 'general'; // 默认模板
@@ -412,6 +415,68 @@ CSS Grid是一种二维布局系统，它可以同时处理行和列。
     }
   }
 
+  // 从URL生成内容
+  async function generateFromUrl() {
+    const apiKey = apiKeyInput.value.trim();
+    const url = targetUrlInput.value.trim();
+
+    // 验证输入
+    if (!apiKey) {
+      showNotification('请输入API密钥', 'error');
+      apiKeyInput.focus();
+      return;
+    }
+
+    if (!url) {
+      showNotification('请输入目标URL', 'error');
+      targetUrlInput.focus();
+      return;
+    }
+
+    try {
+      // 显示加载动画
+      loadingOverlay.classList.remove('hidden');
+
+      // 发送API请求
+      const response = await fetch('/api/dify/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': apiKey
+        },
+        body: JSON.stringify({ url })
+      });
+
+      const data = await response.json();
+
+      // 确保无论如何都隐藏加载动画
+      loadingOverlay.classList.add('hidden');
+
+      if (!response.ok) {
+        throw new Error(data.message || '生成失败');
+      }
+
+      if (data.success) {
+        // 保存API密钥（如果选择了记住）
+        if (rememberKeyCheckbox.checked) {
+          localStorage.setItem('apiKey', apiKey);
+        } else {
+          localStorage.removeItem('apiKey');
+        }
+
+        // 将生成的内容填入编辑器
+        markdownEditor.value = data.content;
+        showNotification('内容已生成', 'success');
+      } else {
+        throw new Error(data.message || '未知错误');
+      }
+    } catch (error) {
+      // 确保隐藏加载动画
+      loadingOverlay.classList.add('hidden');
+      showNotification(`错误: ${error.message}`, 'error');
+    }
+  }
+
   // ======= 事件监听器 =======
 
   // 处理模板选择
@@ -627,6 +692,30 @@ CSS Grid是一种二维布局系统，它可以同时处理行和列。
       }
     }, 500);
   });
+
+  // 绑定事件
+  generateFromUrlBtn.addEventListener('click', generateFromUrl);
+
+  // URL输入框回车事件
+  targetUrlInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      generateFromUrl();
+    }
+  });
+
+  // 更新按钮状态的函数
+  function updateGenerateFromUrlButton() {
+    const url = targetUrlInput.value.trim();
+    const apiKey = apiKeyInput.value.trim();
+    generateFromUrlBtn.disabled = !url || !apiKey;
+  }
+
+  // 添加输入监听
+  targetUrlInput.addEventListener('input', updateGenerateFromUrlButton);
+  apiKeyInput.addEventListener('input', updateGenerateFromUrlButton);
+
+  // 初始化按钮状态
+  updateGenerateFromUrlButton();
 
   // 初始化应用
   initializeApp();
