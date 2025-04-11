@@ -158,7 +158,7 @@ export default {
       color: #6b7280;
     }
   `,
-  template: function(title, content) {
+  render: function(title, content) {
     // 添加发布日期时间戳
     const now = new Date();
     const formattedDate = now.toLocaleDateString('zh-CN', {

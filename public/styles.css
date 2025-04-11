@@ -500,7 +500,10 @@ body {
 
 /* 隐藏元素 */
 .hidden {
-  display: none !important;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s, visibility 0.3s;
 }
 
 /* 通知 - 现代风格 */
@@ -1185,4 +1188,146 @@ body {
   .github-link span {
     display: none;
   }
+}
+
+/* 工作流文章生成功能 */
+.workflow-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 5px;
+}
+
+.workflow-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-color);
+}
+
+.input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.workflow-section textarea {
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 14px;
+  transition: all 0.2s;
+  resize: vertical;
+  min-height: 80px;
+  width: 100%;
+  font-family: inherit;
+}
+
+.workflow-section textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(54, 112, 254, 0.2);
+}
+
+.workflow-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 8px;
+}
+
+/* 为AI生成按钮添加特定样式 */
+#generate-article-btn {
+  width: auto;
+  min-width: 100px;
+  padding: 8px 15px;
+  flex-shrink: 0;
+}
+
+.workflow-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  transition: opacity 0.3s ease;
+  flex-grow: 1;
+}
+
+.workflow-status.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--text-secondary);
+  display: inline-block;
+}
+
+.status-dot.active {
+  background-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(54, 112, 254, 0.2);
+  animation: pulse 1.5s infinite;
+}
+
+.status-dot.completed {
+  background-color: var(--success-color);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(54, 112, 254, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(54, 112, 254, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(54, 112, 254, 0);
+  }
+}
+
+.animated-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* 为标题添加动画效果 */
+.animated-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: transparent;
+  background: linear-gradient(90deg, #3b82f6, #7c3aed, #3b82f6);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: gradient-shift 3s ease infinite;
+  text-shadow: 0px 0px 10px rgba(59, 130, 246, 0.1);
+  letter-spacing: 0.5px;
+}
+
+/* URL部分的标题大小与文章生成一致 */
+.url-section .animated-title {
+  font-size: 16px;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
+  }
+}
+
+/* 当鼠标悬停时添加微小的放大效果 */
+.animated-title:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
 }

@@ -1,0 +1,103 @@
+{
+  "testCases": [
+    {
+      "id": "edu_math",
+      "name": "高中数学教师",
+      "title": "AI在数学教育中的应用",
+      "style": "通俗易懂，教学导向",
+      "context": "针对高中数学教师，介绍如何利用AI工具辅助数学教学，包含实际案例和工具推荐",
+      "expectedResult": {
+        "minTokens": 100000,
+        "maxTokens": 150000,
+        "estimatedTimeSeconds": 140
+      }
+    },
+    {
+      "id": "business_plan",
+      "name": "创业者",
+      "title": "AI时代的一人公司创业指南",
+      "style": "实用，步骤化",
+      "context": "探讨如何利用AI工具打造一人公司，实现高效运营和被动收入",
+      "expectedResult": {
+        "minTokens": 110000,
+        "maxTokens": 160000,
+        "estimatedTimeSeconds": 150
+      }
+    },
+    {
+      "id": "tech_review",
+      "name": "科技博主",
+      "title": "2024年最值得关注的AI应用",
+      "style": "评论性，前瞻性",
+      "context": "评析当前最实用的AI应用工具，并预测未来发展趋势",
+      "expectedResult": {
+        "minTokens": 95000,
+        "maxTokens": 140000,
+        "estimatedTimeSeconds": 130
+      }
+    },
+    {
+      "id": "education_general",
+      "name": "普通教师",
+      "title": "课堂中的AI助手",
+      "style": "简明实用",
+      "context": "介绍教师如何在日常教学中使用AI工具提高教学效率和学生参与度",
+      "expectedResult": {
+        "minTokens": 90000,
+        "maxTokens": 130000,
+        "estimatedTimeSeconds": 120
+      }
+    },
+    {
+      "id": "content_creator",
+      "name": "内容创作者",
+      "title": "用AI提升内容创作效率",
+      "style": "实用指南，步骤清晰",
+      "context": "为博主、自媒体人提供AI辅助创作的完整工作流程和工具推荐",
+      "expectedResult": {
+        "minTokens": 105000,
+        "maxTokens": 155000,
+        "estimatedTimeSeconds": 135
+      }
+    },
+    {
+      "id": "productivity",
+      "name": "效率爱好者",
+      "title": "AI提升工作效率的10种方法",
+      "style": "清单式，直接",
+      "context": "面向普通职场人士，提供可立即应用的AI效率提升方法",
+      "expectedResult": {
+        "minTokens": 85000,
+        "maxTokens": 125000,
+        "estimatedTimeSeconds": 110
+      }
+    },
+    {
+      "id": "research_academic",
+      "name": "学术研究者",
+      "title": "AI在学术研究中的应用与伦理",
+      "style": "学术性，深入",
+      "context": "探讨AI在学术领域的应用场景、最佳实践以及相关伦理问题",
+      "expectedResult": {
+        "minTokens": 120000,
+        "maxTokens": 180000,
+        "estimatedTimeSeconds": 160
+      }
+    }
+  ],
+  "mockResponses": {
+    "generateArticle": {
+      "startStatus": "正在开始生成...",
+      "intermediateStatuses": [
+        "工作流已开始",
+        "节点开始处理",
+        "接收内容中",
+        "节点处理完成 (1)",
+        "节点开始处理",
+        "内容生成中",
+        "接收内容"
+      ],
+      "completionStatus": "生成完成"
+    }
+  }
+}

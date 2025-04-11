@@ -19,8 +19,8 @@ preview_id = "ed67abba3b504765839b8c7391fe4e5c"
 # 绑定静态资源文件夹，使Worker可以访问前端页面
 [[r2_buckets]]
 binding = "ASSETS"
-bucket_name = "markdown-renderer-assets"
-preview_bucket_name = "markdown-renderer-assets-dev"
+bucket_name = "markdown-renderer-assets-new"
+preview_bucket_name = "markdown-renderer-assets-new"
 
 # --- 环境变量配置 ---
 # 对于敏感信息，我们使用 Cloudflare Workers Secrets

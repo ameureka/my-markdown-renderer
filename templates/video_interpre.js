@@ -264,5 +264,71 @@ export default {
     </footer>
 </body>
 </html>`;
+  },
+  // 渲染方法
+  render: function(title, content) {
+    // 处理时间戳
+    const processedContent = content.replace(/(\d{1,2}:)?\d{1,2}:\d{2}/g, match => {
+      return `<span class="timestamp">${match}</span>`;
+    });
+    
+    return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title || '视频解释'}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>${this.styles}</style>
+</head>
+<body>
+    <main>
+        <h1>${title || '视频解释'}</h1>
+        
+        <!-- 章节导航 -->
+        <div class="chapter-nav">
+            <h4>内容导航</h4>
+            <ul id="video-nav">
+                <!-- 动态生成章节导航 -->
+            </ul>
+        </div>
+        
+        ${processedContent}
+    </main>
+    
+    <script>
+      // 生成内容导航
+      document.addEventListener('DOMContentLoaded', () => {
+        const headers = document.querySelectorAll('h2, h3');
+        const nav = document.getElementById('video-nav');
+        
+        if (headers.length > 0 && nav) {
+          headers.forEach((header, index) => {
+            // 为每个标题添加ID
+            const id = 'section-' + index;
+            header.id = id;
+            
+            // 创建导航项
+            const li = document.createElement('li');
+            li.className = header.tagName.toLowerCase();
+            
+            const a = document.createElement('a');
+            a.href = '#' + id;
+            a.textContent = header.textContent;
+            
+            li.appendChild(a);
+            nav.appendChild(li);
+          });
+        } else {
+          // 如果没有标题，隐藏导航
+          const navContainer = document.querySelector('.chapter-nav');
+          if (navContainer) {
+            navContainer.style.display = 'none';
+          }
+        }
+      });
+    </script>
+</body>
+</html>`;
   }
 };

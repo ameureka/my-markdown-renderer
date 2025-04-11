@@ -229,18 +229,22 @@ export default {
       color: #64748b;
     }
   `,
-  template: function(title, content) {
+  // 渲染方法
+  render: function(title, content) {
     return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${title}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>${title || '技术解释'}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>${this.styles}</style>
 </head>
 <body>
-    <main>${content}</main>
+    <main>
+        <h1>${title || '技术解释'}</h1>
+        ${content}
+    </main>
     <footer>
         <hr>
         <p><small>由 Markdown 渲染服务生成 · 技术解释模板</small></p>

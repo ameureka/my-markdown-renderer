@@ -565,5 +565,114 @@ export default {
     </footer>
 </body>
 </html>`;
+  },
+
+  // 渲染方法
+  render: function(title, content) {
+    // 生成目录
+    const toc = this.generateTOC ? this.generateTOC(content) : '';
+    
+    // 添加特殊块处理
+    const processedContent = this.processSpecialBlocks ? this.processSpecialBlocks(content) : content;
+    
+    return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title || '技术介绍'}</title>
+    <style>${this.styles}</style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div>
+                <h1 class="header-title">${title || '技术介绍'}</h1>
+                <div class="header-meta">发布于 ${new Date().toLocaleDateString('zh-CN')}</div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="layout">
+        <div class="content-wrapper">
+            ${toc ? `
+            <div class="sidebar">
+                <div class="toc-title">目录</div>
+                ${toc}
+            </div>
+            ` : ''}
+            
+            <main>
+                ${processedContent}
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        // 简单的目录高亮功能
+        document.addEventListener('DOMContentLoaded', () => {
+            const tocLinks = document.querySelectorAll('.toc-list a');
+            const headings = document.querySelectorAll('h1, h2, h3');
+            
+            if (tocLinks.length > 0 && headings.length > 0) {
+                window.addEventListener('scroll', () => {
+                    const scrollY = window.scrollY;
+                    
+                    // 找出当前滚动位置对应的标题
+                    let currentHeadingId = '';
+                    headings.forEach(heading => {
+                        if (heading.offsetTop - 100 <= scrollY) {
+                            currentHeadingId = heading.id;
+                        }
+                    });
+                    
+                    // 更新目录高亮
+                    tocLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + currentHeadingId) {
+                            link.classList.add('active');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>`;
+  },
+
+  // 生成目录
+  generateTOC: function(content) {
+    const headings = content.match(/<h[2-3][^>]*>(.*?)<\/h[2-3]>/g) || [];
+    if (headings.length === 0) return '';
+    
+    let toc = '<ul class="toc-list">';
+    
+    headings.forEach(heading => {
+      const levelMatch = heading.match(/<h([2-3])/);
+      const textMatch = heading.match(/<h[2-3][^>]*>(.*?)<\/h[2-3]>/);
+      
+      if (levelMatch && textMatch) {
+        const level = parseInt(levelMatch[1]);
+        const text = textMatch[1].replace(/<[^>]+>/g, '');
+        const id = text.toLowerCase().replace(/[^\w]+/g, '-');
+        
+        toc += `<li class="${level === 3 ? 'h3' : ''}"><a href="#${id}">${text}</a></li>`;
+      }
+    });
+    
+    toc += '</ul>';
+    return toc;
+  },
+  
+  // 处理特殊块
+  processSpecialBlocks: function(content) {
+    // 为标题添加ID以便于目录跳转
+    let processedContent = content.replace(/<h([2-3])([^>]*)>(.*?)<\/h\1>/g, (match, level, attrs, text) => {
+      const id = text.toLowerCase().replace(/<[^>]+>/g, '').replace(/[^\w]+/g, '-');
+      return `<h${level}${attrs} id="${id}">${text}</h${level}>`;
+    });
+    
+    return processedContent;
   }
 };

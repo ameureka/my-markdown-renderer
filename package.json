@@ -17,6 +17,24 @@
 		"wrangler": "^4.7.2"
 	},
 	"dependencies": {
-		"marked": "^15.0.7"
-	}
+		"eventsource": "^3.0.6",
+		"marked": "^15.0.7",
+		"node-fetch": "^2.7.0"
+	},
+	"description": "**当前版本**: 0.4.1",
+	"main": "improve_dify_test.js",
+	"directories": {
+		"test": "tests"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ameureka/wecom_text_agent.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/ameureka/wecom_text_agent/issues"
+	},
+	"homepage": "https://github.com/ameureka/wecom_text_agent#readme"
 }

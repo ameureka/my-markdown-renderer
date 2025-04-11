@@ -114,13 +114,41 @@
       <!-- URL输入和生成按钮 -->
       <div class="url-section">
         <div class="input-group">
-          <label for="target-url">URL地址</label>
+          <label for="target-url" class="animated-title">AI文章改写</label>
           <div class="url-input-container">
             <input type="text" id="target-url" placeholder="输入要处理的URL地址">
             <button id="generate-from-url" class="primary-button" title="从URL生成">
               <i class="icon ion-md-cloud-download"></i>
               从URL生成
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 文章生成功能 -->
+      <div class="workflow-section">
+        <h3 class="animated-title">AI文章生成</h3>
+        <div class="input-group">
+          <label for="workflow-title">标题</label>
+          <input type="text" id="workflow-title" placeholder="例如: AI PPT">
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="workflow-style">风格</label>
+            <input type="text" id="workflow-style" placeholder="例如: 简约, 现代 (可选)">
+          </div>
+          <div class="input-group">
+            <label for="workflow-context">上下文/要求</label>
+            <textarea id="workflow-context" placeholder="例如: 如何更好设计PPT方便教学 (可选)" rows="2"></textarea>
+          </div>
+        </div>
+        <div class="workflow-actions">
+          <button id="generate-article-btn" class="primary-button">
+            <i class="icon ion-md-create"></i>AI生成
+          </button>
+          <div id="workflow-status" class="workflow-status hidden">
+            <span class="status-dot"></span>
+            <span class="status-text">准备中...</span>
           </div>
         </div>
       </div>
@@ -133,7 +161,7 @@
 
       <!-- 模板选择 -->
       <div class="template-section">
-        <h3>选择排版模板</h3>
+        <h3 class="animated-title">选择排版模板</h3>
         <div class="template-grid">
           <div class="template-card" data-template="general">
             <i class="icon ion-md-paper"></i>
@@ -312,7 +340,7 @@
         </div>
         
         <div class="footer-column">
-          <h3>公司</h3>
+          <h3>联系</h3>
           <ul>
           </ul>
         </div>
