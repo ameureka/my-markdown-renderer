@@ -224,6 +224,8 @@ https://my-markdown-renderer.lynnwongchina.workers.dev/view/unique-id?template=n
    创建`.dev.vars`文件：
    ```
    API_KEY=your_local_test_key
+   DIFY_API_KEY=your_dify_api_key
+   DIFY_ARTICLE_API_KEY=your_dify_article_api_key
    ```
 
 3. 启动本地开发服务器：
@@ -233,34 +235,50 @@ https://my-markdown-renderer.lynnwongchina.workers.dev/view/unique-id?template=n
 
 ### 6.2 部署到Cloudflare Workers
 
-1. 设置API密钥：
+1. 设置环境变量：
    ```bash
+   # 设置API密钥
    wrangler secret put API_KEY
+   # 设置Dify API密钥
+   wrangler secret put DIFY_API_KEY
+   # 设置Dify文章生成API密钥
+   wrangler secret put DIFY_ARTICLE_API_KEY
    ```
 
 2. 上传静态资源到R2存储桶：
    ```bash
-   # 使用deploy.sh脚本自动上传资源
-   ./deploy.sh
+   # 上传HTML文件
+   wrangler r2 object put markdown-renderer-assets-new/index.html --file="public/index.html" --remote
+   
+   # 上传JavaScript文件
+   wrangler r2 object put markdown-renderer-assets-new/script.js --file="public/script.js" --remote
+   
+   # 上传CSS文件
+   wrangler r2 object put markdown-renderer-assets-new/styles.css --file="public/styles.css" --remote
    ```
    
-   或手动上传：
-   ```bash
-   # 创建R2存储桶（如果尚未创建）
-   wrangler r2 bucket create markdown-renderer-assets
-   
-   # 上传静态资源
-   wrangler r2 object put markdown-renderer-assets/index.html --file ./public/index.html --content-type "text/html"
-   wrangler r2 object put markdown-renderer-assets/styles.css --file ./public/styles.css --content-type "text/css"
-   wrangler r2 object put markdown-renderer-assets/script.js --file ./public/script.js --content-type "application/javascript"
-   ```
+   > 注意：必须使用 `--remote` 参数来确保文件被上传到Cloudflare的远程存储桶，而不是本地存储。
 
 3. 部署Worker：
    ```bash
    wrangler deploy
    ```
 
-部署后，您的服务将在 https://my-markdown-renderer.lynnwongchina.workers.dev 上线，支持所有5种模板和完整的API功能。
+部署完成后，您的服务将在以下地址上线：
+https://my-markdown-renderer.lynnwongchina.workers.dev
+
+### 6.3 部署检查清单
+
+- [ ] 环境变量设置完成
+  - [ ] API_KEY
+  - [ ] DIFY_API_KEY
+  - [ ] DIFY_ARTICLE_API_KEY
+- [ ] 静态资源上传完成
+  - [ ] index.html
+  - [ ] script.js
+  - [ ] styles.css
+- [ ] Worker部署成功
+- [ ] 访问测试通过
 
 ## 7. 前端界面使用
 
