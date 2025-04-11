@@ -1,50 +1,101 @@
-# Markdown渲染服务 - 综合说明文档
-**当前版本**: 0.4.1
+# AI智能创作平台
+**当前版本**: 0.8.0
 
 ## 1. 项目概述
 
-Markdown渲染服务是一个基于Cloudflare Workers的云端应用，能够将Markdown内容转换为精美的HTML页面，支持多种排版模板，并提供美观的前端界面供用户使用。它支持API调用和在线编辑两种使用方式。
+AI智能创作平台是一个基于Cloudflare Workers的云端应用，集成了AI文章生成和Markdown渲染功能。它不仅能够将Markdown内容转换为精美的HTML页面，还能通过AI技术帮助用户快速创作高质量的文章内容。平台支持多种排版模板，并提供美观的前端界面供用户使用。
 
 **版本更新**:
+- 版本0.8.0：添加AI文章创作功能，优化界面设计
 - 版本0.4.1：完善前端优化设计
-- 计划中的版本：增加内容改写功能选项
+- 计划中的版本：增加更多AI辅助创作功能
 
 ### 1.1 主要功能
 
+- ✅ AI智能文章生成
+  - 支持自定义标题和风格
+  - 支持上下文要求定制
+  - 实时生成反馈
 - ✅ Markdown转HTML渲染
-- ✅ 5种精美排版模板支持
-- ✅ 安全的API密钥验证
-- ✅ 云端存储和链接分享
-- ✅ 响应式的前端界面
-- ✅ 亮色/暗色主题切换
+  - 5种精美排版模板
+  - 支持API调用和在线编辑
+- ✅ 智能内容处理
+  - URL内容智能提取
+  - AI优化改写
+- ✅ 云端功能
+  - 安全的API密钥验证
+  - 云端存储和链接分享
+- ✅ 用户界面
+  - 响应式的前端设计
+  - 亮色/暗色主题切换
+  - 实时状态反馈
 
 ## 2. 项目结构
 
 ```
 my-markdown-renderer/
-├── src/                  # 后端源代码
-│   ├── index.js          # 主应用入口和路由处理
-│   └── templateManager.js # 模板管理模块
-├── public/               # 前端静态资源
-│   ├── index.html        # 前端主页
-│   ├── styles.css        # 样式表
-│   └── script.js         # 客户端脚本
-├── templates/            # 渲染模板
-│   ├── general.js        # 通用模板
-│   ├── tech_intro.js     # 技术介绍模板
-│   ├── news_broad.js     # 新闻广播模板
-│   ├── tech_interpre.js  # 技术解读模板
-│   └── video_interpre.js # 视频讲解模板
-├── test/                 # 测试文件
-├── wrangler.toml         # Cloudflare Workers配置
-├── deploy.sh             # 部署脚本
-├── API.md                # API详细文档
-└── README.md             # 项目说明
+├── src/                      # 后端源代码
+│   ├── index.js              # 主应用入口和路由处理
+│   ├── templateManager.js     # 模板管理模块
+│   ├── difyIntegration.js    # Dify API集成模块
+│   └── difyIntegrationArticle.js # AI文章生成模块
+├── public/                   # 前端静态资源
+│   ├── index.html            # 前端主页
+│   ├── styles.css            # 样式表
+│   └── script.js             # 客户端脚本
+├── templates/                # 渲染模板
+│   ├── general.js            # 通用模板
+│   ├── tech_intro.js         # 技术介绍模板
+│   ├── news_broad.js         # 新闻广播模板
+│   ├── tech_interpre.js      # 技术解读模板
+│   └── video_interpre.js     # 视频讲解模板
+├── testapi-v02/             # API测试脚本
+│   ├── chinese_api_test.js   # 中文API测试
+│   ├── frontend_api_test.js  # 前端API测试
+│   └── temp_test_dify.js     # Dify API测试
+├── wrangler.toml            # Cloudflare Workers配置
+├── deploy.sh                # 部署脚本
+├── API.md                   # API详细文档
+└── README.md                # 项目说明
 ```
 
-## 3. API使用详解
+## 3. AI文章生成功能
 
-### 3.1 认证方式
+### 3.1 功能概述
+
+AI文章生成功能通过集成Dify API，提供智能文章创作服务。用户可以通过简单的输入获得高质量的文章内容。
+
+### 3.2 使用方法
+
+1. **基本步骤**
+   - 输入文章标题（必填）
+   - 选择文章风格（可选）
+   - 提供上下文/要求（可选）
+   - 点击"AI生成"按钮
+
+2. **风格选项示例**
+   - 简约
+   - 专业
+   - 活泼
+   - 学术
+   - 新闻
+
+3. **上下文/要求示例**
+   - 面向初学者的技术教程
+   - 产品营销文案
+   - 深度技术分析
+   - 新闻报道风格
+
+### 3.3 最佳实践
+
+- 提供清晰具体的标题
+- 添加适当的上下文信息
+- 选择合适的文章风格
+- 生成后可以进行人工优化
+
+## 4. API使用详解
+
+### 4.1 认证方式
 
 所有涉及写操作的API端点需要通过API密钥进行认证：
 
@@ -52,9 +103,9 @@ my-markdown-renderer/
 X-API-Key: your-api-key
 ```
 
-### 3.2 主要API端点
+### 4.2 主要API端点
 
-#### 3.2.1 状态检查
+#### 4.2.1 状态检查
 
 ```bash
 curl https://my-markdown-renderer.lynnwongchina.workers.dev/status
@@ -62,7 +113,7 @@ curl https://my-markdown-renderer.lynnwongchina.workers.dev/status
 
 返回服务状态和可用模板列表。
 
-#### 3.2.2 获取模板列表
+#### 4.2.2 获取模板列表
 
 ```bash
 curl https://my-markdown-renderer.lynnwongchina.workers.dev/templates
@@ -70,7 +121,7 @@ curl https://my-markdown-renderer.lynnwongchina.workers.dev/templates
 
 返回所有可用渲染模板的名称、显示名和描述。
 
-#### 3.2.3 上传Markdown内容
+#### 4.2.3 上传Markdown内容
 
 **JSON格式上传：**
 
@@ -107,7 +158,7 @@ curl -X POST https://my-markdown-renderer.lynnwongchina.workers.dev/upload \
 }
 ```
 
-#### 3.2.4 查看渲染内容
+#### 4.2.4 查看渲染内容
 
 访问上传后返回的URL查看渲染结果：
 
@@ -121,9 +172,9 @@ https://my-markdown-renderer.lynnwongchina.workers.dev/view/unique-id
 https://my-markdown-renderer.lynnwongchina.workers.dev/view/unique-id?template=news_broad&title=新标题
 ```
 
-## 4. 模板使用指南
+## 5. 模板使用指南
 
-### 4.1 可用模板列表
+### 5.1 可用模板列表
 
 1. **通用模板(general)**
    - 适用于各种场景的基本模板
@@ -145,7 +196,7 @@ https://my-markdown-renderer.lynnwongchina.workers.dev/view/unique-id?template=n
    - 专为视频教程文字版设计
    - 支持时间戳标记：`@[00:15:30]`格式
 
-### 4.2 特殊语法支持
+### 5.2 特殊语法支持
 
 除了标准Markdown语法外，部分模板支持额外功能：
 
@@ -158,9 +209,9 @@ https://my-markdown-renderer.lynnwongchina.workers.dev/view/unique-id?template=n
   更多内容...
   ```
 
-## 5. 开发与部署
+## 6. 开发与部署
 
-### 5.1 本地开发
+### 6.1 本地开发
 
 1. 克隆仓库并安装依赖：
    ```bash
@@ -180,7 +231,7 @@ https://my-markdown-renderer.lynnwongchina.workers.dev/view/unique-id?template=n
    wrangler dev
    ```
 
-### 5.2 部署到Cloudflare Workers
+### 6.2 部署到Cloudflare Workers
 
 1. 设置API密钥：
    ```bash
@@ -211,7 +262,7 @@ https://my-markdown-renderer.lynnwongchina.workers.dev/view/unique-id?template=n
 
 部署后，您的服务将在 https://my-markdown-renderer.lynnwongchina.workers.dev 上线，支持所有5种模板和完整的API功能。
 
-## 6. 前端界面使用
+## 7. 前端界面使用
 
 服务提供了美观的前端界面，可通过浏览器访问：
 https://my-markdown-renderer.lynnwongchina.workers.dev
@@ -232,11 +283,11 @@ https://my-markdown-renderer.lynnwongchina.workers.dev
 - 复制生成的链接
 - 切换暗色/亮色主题
 
-## 7. 使用限制
+## 8. 使用限制
 
 - 最大Markdown内容大小：25MB
 - API请求速率：每分钟100次请求
 
-## 8. 许可证
+## 9. 许可证
 
 MIT
