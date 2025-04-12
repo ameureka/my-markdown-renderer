@@ -595,6 +595,13 @@ CSS Grid是一种二维布局系统，它可以同时处理行和列。
                 // 触发input事件以便可能的双向绑定能够更新
                 markdownEditor.dispatchEvent(new Event('input', { bubbles: true }));
               }
+              // 新增: 处理data.result字段
+              else if (data.result) {
+                console.log(`内容更新 (result): 收到 ${data.result.length} 字符`);
+                markdownEditor.value = data.result;
+                // 触发input事件以便可能的双向绑定能够更新
+                markdownEditor.dispatchEvent(new Event('input', { bubbles: true }));
+              }
               
               // 如果生成完成
               if (data.done) {

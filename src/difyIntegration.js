@@ -64,6 +64,7 @@ export async function callDifyWorkflow(url, apiKey, maxRetries = 2, timeoutMs = 
       // 成功响应
       const data = await response.json();
       console.log("Dify URL工作流API调用成功，收到响应。");
+      console.log("完整响应数据:", JSON.stringify(data));
 
       // 提取内容，处理可能的嵌套结构
       let answer = null;

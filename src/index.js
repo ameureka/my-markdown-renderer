@@ -1239,10 +1239,17 @@ export default {
                             if (data && data.content) {
                                 sendEvent({ 
                                     status: status, 
-                                    content: data.content 
+                                    content: data.content,
+                                    result: data.content  // 同时通过result字段发送
+                                });
+                            } else if (data && data.result) {  // 新增：处理result字段
+                                sendEvent({ 
+                                    status: status, 
+                                    content: data.result,
+                                    result: data.result
                                 });
                             } else {
-                                // 如果没有content，只发送status
+                                // 如果没有content或result，只发送status
                                 sendEvent({ status: status });
                             }
                         },
@@ -1250,6 +1257,7 @@ export default {
                             sendEvent({ 
                                 status: '生成完成', 
                                 content: result,
+                                result: result,  // 同时通过result字段发送
                                 done: true
                             });
                             sendEvent('[DONE]');
